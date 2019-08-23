@@ -24,7 +24,7 @@ from core.auto_process.common import (
 )
 from core.forks import auto_fork
 from core.plugins.downloaders.nzb.utils import report_nzb
-from core.plugins.subtitles import import_subs
+from core.plugins.subtitles import import_subs, rename_subs
 from core.scene_exceptions import process_all_exceptions
 from core.utils import (
     convert_to_ascii,
@@ -125,6 +125,7 @@ def process(section, dir_name, input_name=None, failed=False, client_agent='manu
         if transcoder.is_video_good(video, status):
             good_files += 1
             import_subs(video)
+            rename_subs(dir_name)
     if num_files > 0:
         if good_files == num_files and not status == 0:
             logger.info('Found Valid Videos. Setting status Success')
