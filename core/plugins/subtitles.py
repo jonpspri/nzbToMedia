@@ -40,7 +40,7 @@ def import_subs(filename):
 
 def rename_subs(path):
     filepaths = []
-    sub_ext = ['srt', 'sub', 'idx']
+    sub_ext = ['.srt', '.sub', '.idx']
     vidfiles = core.list_media_files(path, media=True, audio=False, meta=False, archives=False)
     if not vidfiles or len(vidfiles) > 1: # If there is more than 1 video file, or no video files, we can't rename subs.
         return
@@ -71,9 +71,9 @@ def rename_subs(path):
         # rename the sub file as name.lan.ext
         if not lan:
             # could call ffprobe to parse the sub information and get language if lan unknown here.
-            new_sub_name = '{name}.{ext}'.format(name=name, ext=ext)
+            new_sub_name = '{name}{ext}'.format(name=name, ext=ext)
         else:
-            new_sub_name = '{name}.{lan}.{ext}'.format(name=name, lan=str(lan), ext=ext)
+            new_sub_name = '{name}.{lan}{ext}'.format(name=name, lan=str(lan), ext=ext)
         new_sub = os.path.join(directory, new_sub_name)
         if os.path.isfile(new_sub): # Don't copy over existing
             logger.debug('Unable to rename sub file {old} as destination {new} already exists'.format(old=sub, new=new_sub))
