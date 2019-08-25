@@ -49,7 +49,7 @@ def rename_subs(path):
         for filename in filenames:
             filepaths.extend([os.path.join(directory, filename)])
     subfiles = [item for item in filepaths if os.path.splitext(item)[1] in sub_ext]
-    for sub in subfile:
+    for sub in subfiles:
         if name in sub: # The sub file name already includes the video name.
             continue
         subname, ext = os.path.splitext(sub)
