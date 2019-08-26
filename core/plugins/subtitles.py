@@ -51,9 +51,9 @@ def rename_subs(path):
             filepaths.extend([os.path.join(directory, filename)])
     subfiles = [item for item in filepaths if os.path.splitext(item)[1] in sub_ext]
     for sub in subfiles:
-        if name in sub: # The sub file name already includes the video name.
+        subname, ext = os.path.splitext(os.path.basename(sub))
+        if name in subname: # The sub file name already includes the video name.
             continue
-        subname, ext = os.path.splitext(sub)
         words = re.findall('[a-zA-Z]+',str(subname)) # find whole words in string
         # parse the words for language descriptors.
         lan = None
