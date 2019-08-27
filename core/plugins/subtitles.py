@@ -50,6 +50,8 @@ def rename_subs(path):
         for filename in filenames:
             filepaths.extend([os.path.join(directory, filename)])
     subfiles = [item for item in filepaths if os.path.splitext(item)[1] in sub_ext]
+    subfiles.sort() #This should sort subtitle names by language (alpha) and Number (where multiple)
+    renamed = []
     for sub in subfiles:
         subname, ext = os.path.splitext(os.path.basename(sub))
         if name in subname: # The sub file name already includes the video name.
@@ -72,15 +74,22 @@ def rename_subs(path):
         # rename the sub file as name.lan.ext
         if not lan:
             # could call ffprobe to parse the sub information and get language if lan unknown here.
-            new_sub_name = '{name}{ext}'.format(name=name, ext=ext)
+            new_sub_name = name
         else:
-            new_sub_name = '{name}.{lan}{ext}'.format(name=name, lan=str(lan), ext=ext)
-        new_sub = os.path.join(directory, new_sub_name)
-        if os.path.isfile(new_sub): # Don't copy over existing
+            new_sub_name = '{name}.{lan}'.format(name=name, lan=str(lan))
+        new_sub = os.path.join(directory, new_sub_name) # full path and name less ext
+        if '{new_sub}{ext}'.format(new_sub=new_sub, ext=ext) in renamed: # If duplicate names, add unique number before ext.
+            for i in xrange(1,len(renamed)):
+                if '{new_sub}.{i}{ext}'.format(new_sub=new_sub, i=i, ext=ext) in renamed:
+                    continue
+                new_sub = '{new_sub}.{i}'.format(new_sub=new_sub, i=i)
+        new_sub = '{new_sub}{ext}'.format(new_sub=new_sub, ext=ext) # add extension now
+        if os.path.isfile(new_sub): # Don't copy over existing - final check.
             logger.debug('Unable to rename sub file {old} as destination {new} already exists'.format(old=sub, new=new_sub))
             continue
         logger.debug('Renaming sub file from {old} to {new}'.format
                  (old=sub, new=new_sub))
+        renamed.append(new_sub)
         try:
             os.rename(sub, new_sub)
         except Exception as error:
