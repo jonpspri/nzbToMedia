@@ -79,7 +79,7 @@ def rename_subs(path):
             new_sub_name = '{name}.{lan}'.format(name=name, lan=str(lan))
         new_sub = os.path.join(directory, new_sub_name) # full path and name less ext
         if '{new_sub}{ext}'.format(new_sub=new_sub, ext=ext) in renamed: # If duplicate names, add unique number before ext.
-            for i in xrange(1,len(renamed)):
+            for i in range(1,len(renamed)+1):
                 if '{new_sub}.{i}{ext}'.format(new_sub=new_sub, i=i, ext=ext) in renamed:
                     continue
                 new_sub = '{new_sub}.{i}'.format(new_sub=new_sub, i=i)
